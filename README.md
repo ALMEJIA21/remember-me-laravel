@@ -26,7 +26,7 @@ Si deseas ejecutar este proyecto en tu entorno local, sigue estos pasos:
 
 1. Clona este repositorio:
    ```bash
-   git clone [https://github.com/TU_USUARIO/TU_REPOSITORIO.git](https://github.com/TU_USUARIO/TU_REPOSITORIO.git)
+   git clone (https://github.com/ALMEJIA21/remember-me-laravel))
 
 
 
