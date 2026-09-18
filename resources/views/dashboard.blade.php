@@ -1,123 +1,60 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | Remember Me</title>
+@extends('layouts.app')
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
+@section('title', 'Dashboard | Remember Me')
 
-<div class="container">
+@section('content')
+    <header>
+        <h1>Bienvenido, Usuario 👋</h1>
+        <p>Gestiona tus tratamientos de forma sencilla y segura.</p>
+    </header>
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-        <h2>💊 Remember Me</h2>
+    <!-- TARJETAS -->
+    <section class="cards">
+        <div class="card">
+            <h3><i class="fa-solid fa-capsules" style="color: #0d9488;"></i> Medicamentos</h3>
+            <p style="font-size: 1.8rem; font-weight: bold; margin-top: 10px;">5</p>
+        </div>
 
-        <ul>
-            <li>
-                <a href="{{ route('dashboard') }}">
-                    <i class="fa-solid fa-house"></i> Inicio
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('usuario') }}">
-                    <i class="fa-solid fa-user"></i> Usuario
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('tratamiento') }}">
-                    <i class="fa-solid fa-notes-medical"></i> Tratamiento
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('medicamentos') }}">
-                    <i class="fa-solid fa-capsules"></i> Medicamentos
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('recordatorios') }}">
-                    <i class="fa-solid fa-bell"></i> Recordatorios
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('seguimiento') }}">
-                    <i class="fa-solid fa-chart-line"></i> Seguimiento
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('inicio') }}">
-                    <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
-                </a>
-            </li>
-        </ul>
-    </aside>
+        <div class="card">
+            <h3><i class="fa-solid fa-clock" style="color: #d97706;"></i> Próxima Dosis</h3>
+            <p style="font-size: 1.8rem; font-weight: bold; margin-top: 10px;">08:00 PM</p>
+        </div>
 
-    <!-- CONTENIDO PRINCIPAL -->
-    <main class="main-content">
+        <div class="card">
+            <h3><i class="fa-solid fa-calendar-days" style="color: #4f46e5;"></i> Tratamientos</h3>
+            <p style="font-size: 1.8rem; font-weight: bold; margin-top: 10px;">3</p>
+        </div>
+    </section>
 
-        <header>
-            <h1>Bienvenido, Usuario 👋</h1>
-            <p>Gestiona tus tratamientos de forma sencilla.</p>
-        </header>
+    <!-- TABLA -->
+    <section class="table-section" style="margin-top: 30px; padding: 20px;">
+        <h2>Próximos Recordatorios</h2>
 
-        <!-- TARJETAS -->
-        <section class="cards">
-            <div class="card">
-                <h3><i class="fa-solid fa-capsules"></i> Medicamentos</h3>
-                <p>5</p>
-            </div>
-
-            <div class="card">
-                <h3><i class="fa-solid fa-clock"></i> Próxima Dosis</h3>
-                <p>08:00 PM</p>
-            </div>
-
-            <div class="card">
-                <h3><i class="fa-solid fa-calendar-days"></i> Tratamientos</h3>
-                <p>3</p>
-            </div>
-        </section>
-
-        <!-- TABLA -->
-        <section class="table-section">
-            <h2>Próximos Recordatorios</h2>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Medicamento</th>
-                        <th>Hora</th>
-                        <th>Estado</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Paracetamol</td>
-                        <td>08:00 PM</td>
-                        <td class="pendiente">Pendiente</td>
-                    </tr>
-                    <tr>
-                        <td>Ibuprofeno</td>
-                        <td>10:00 PM</td>
-                        <td class="pendiente">Pendiente</td>
-                    </tr>
-                    <tr>
-                        <td>Vitamina C</td>
-                        <td>07:00 AM</td>
-                        <td class="completado">Tomado</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-
-    </main>
-
-</div>
-
-</body>
-</html>
+        <table style="width: 100%; margin-top: 15px; border-collapse: collapse;">
+            <thead>
+                <tr style="text-align: left;">
+                    <th style="padding: 12px;">Medicamento</th>
+                    <th style="padding: 12px;">Hora</th>
+                    <th style="padding: 12px;">Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <td style="padding: 12px;">Paracetamol</td>
+                    <td style="padding: 12px;">08:00 PM</td>
+                    <td style="padding: 12px;"><span class="pendiente">Pendiente</span></td>
+                </tr>
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <td style="padding: 12px;">Ibuprofeno</td>
+                    <td style="padding: 12px;">10:00 PM</td>
+                    <td style="padding: 12px;"><span class="pendiente">Pendiente</span></td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px;">Vitamina C</td>
+                    <td style="padding: 12px;">07:00 AM</td>
+                    <td style="padding: 12px;"><span class="completado">Tomado</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+@endsection

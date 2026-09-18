@@ -9,12 +9,13 @@ class Recordatorio extends Model
 {
     use HasFactory;
 
+    protected $connection = 'mysql';
     protected $table = 'recordatorios';
 
     protected $fillable = [
-        'medicamento',
-        'hora',
-        'dias',
+        'medicamento', 
+        'hora', 
+        'dias', 
         'notificacion'
     ];
 }

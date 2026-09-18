@@ -1,78 +1,41 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Recordatorios - Remember Me</title>
-    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/formularios.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
+@extends('layouts.app')
 
-<div class="container">
-    <aside class="sidebar">
-        <h2>💊 Remember Me</h2>
-        <ul>
-            <li><a href="{{ route('dashboard') }}"><i class="fa-solid fa-house"></i> Inicio</a></li>
-            <li><a href="{{ route('usuario') }}"><i class="fa-solid fa-user"></i> Usuario</a></li>
-            <li><a href="{{ route('tratamiento') }}"><i class="fa-solid fa-notes-medical"></i> Tratamiento</a></li>
-            <li><a href="{{ route('medicamentos') }}"><i class="fa-solid fa-capsules"></i> Medicamentos</a></li>
-            <li><a href="{{ route('recordatorios') }}"><i class="fa-solid fa-bell"></i> Recordatorios</a></li>
-            <li><a href="{{ route('seguimiento') }}"><i class="fa-solid fa-chart-line"></i> Seguimiento</a></li>
-            <li><a href="{{ route('inicio') }}"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</a></li>
-        </ul>
-    </aside>
+@section('title', 'Recordatorios - Remember Me')
 
-    <main class="main-content">
-        <div class="formulario">
-            <h2>⏰ Recordatorios</h2>
+@section('content')
+    <div class="formulario">
+        <h2>⏰ Recordatorios</h2>
 
-            <form method="POST">
-                @csrf
-                <label>Medicamento</label>
-                <input type="text" name="medicamento" placeholder="Nombre medicamento">
+        <form method="POST">
+            @csrf
+            <label>Medicamento</label>
+            <input type="text" name="medicamento" placeholder="Nombre medicamento">
 
-                <label>Hora del recordatorio</label>
-                <input type="time" name="hora">
+            <label>Hora del recordatorio</label>
+            <input type="time" name="hora">
 
-                <label>Días</label>
-                <select name="dias">
-                    <option>Todos los días</option>
-                    <option>Lunes a viernes</option>
-                    <option>Personalizado</option>
-                </select>
+            <label>Días</label>
+            <select name="dias">
+                <option>Todos los días</option>
+                <option>Lunes a viernes</option>
+                <option>Personalizado</option>
+            </select>
 
-                <div class="notificacion">
-                    <label for="activar">Activar notificaciones</label>
-                    <input type="checkbox" id="activar" name="notificacion">
-                </div>
+            <div class="notificacion" style="display: flex; align-items: center; gap: 10px; margin: 15px 0;">
+                <input type="checkbox" id="activar" name="notificacion" style="width: 18px; height: 18px;">
+                <label for="activar" style="margin-bottom: 0; cursor: pointer;">Activar notificaciones</label>
+            </div>
 
-                <button type="submit" class="btn">Registrar</button>
-            </form>
+            <button type="submit" class="btn">Registrar</button>
+        </form>
 
-            <?php
-            if ($_POST) {
-                $medicamento = $_POST["medicamento"];
-                $hora = $_POST["hora"];
-                $dias = $_POST["dias"];
-
-                if (isset($_POST["notificacion"])) {
-                    $notificacion = "Sí";
-                } else {
-                    $notificacion = "No";
-                }
-
-                echo "<hr>";
-                echo "<h3>Recordatorio registrado</h3>";
-                echo "Medicamento: " . $medicamento . "<br>";
-                echo "Hora: " . $hora . "<br>";
-                echo "Días: " . $dias . "<br>";
-                echo "Notificaciones: " . $notificacion;
-            }
-            ?>
-        </div>
-    </main>
-</div>
-
-</body>
-</html>
+        @if(request()->isMethod('post'))
+            <hr style="margin: 20px 0; border: 0; border-top: 1px solid #e2e8f0;">
+            <h3 style="color: #0f766e; margin-bottom: 8px;">Recordatorio registrado</h3>
+            <p><strong>Medicamento:</strong> {{ request('medicamento') }}</p>
+            <p><strong>Hora:</strong> {{ request('hora') }}</p>
+            <p><strong>Días:</strong> {{ request('dias') }}</p>
+            <p><strong>Notificaciones:</strong> {{ request('notificacion') ? 'Sí' : 'No' }}</p>
+        @endif
+    </div>
+@endsection

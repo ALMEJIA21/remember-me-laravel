@@ -9,7 +9,7 @@ use App\Http\Controllers\UsuarioController;
 
 // Página de bienvenida / Inicio público
 Route::get('/', function () {
-    return view('index'); 
+    return view('welcome'); 
 })->name('inicio');
 
 // Panel principal (Dashboard)
@@ -24,7 +24,10 @@ Route::match(['get', 'post'], '/medicamentos', [MedicamentoController::class, 'i
 Route::match(['get', 'post'], '/recordatorios', [RecordatorioController::class, 'index'])->name('recordatorios');
 Route::match(['get', 'post'], '/seguimiento', [SeguimientoController::class, 'index'])->name('seguimiento');
 
-// Ruta para el inicio de sesión
 Route::get('/login', function () {
     return view('login');
 })->name('login');
+
+Route::get('/farmacias', function () {
+    return view('farmacias');
+})->name('farmacias');
