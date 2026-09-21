@@ -11,10 +11,10 @@
             @csrf
             
             <label>Nombre medicamento</label>
-            <input type="text" name="nombre" placeholder="Ej: Acetaminofén">
+            <input type="text" name="nombre" placeholder="Ej: Acetaminofén" required>
 
             <label>Dosis</label>
-            <input type="text" name="dosis" placeholder="Ej: 500 mg">
+            <input type="text" name="dosis" placeholder="Ej: 500 mg" required>
 
             <label>Frecuencia</label>
             <select name="frecuencia">
@@ -24,7 +24,7 @@
             </select>
 
             <label>Cantidad</label>
-            <input type="number" name="cantidad" placeholder="Cantidad">
+            <input type="number" name="cantidad" placeholder="Cantidad" required>
 
             <label>Observaciones</label>
             <textarea name="observaciones" placeholder="Notas importantes"></textarea>
@@ -32,15 +32,52 @@
             <button type="submit" class="btn">Registrar</button>
         </form>
 
-        @if(request()->isMethod('post'))
-            <hr style="margin: 20px 0; border: 0; border-top: 1px solid #e2e8f0;">
-            <h3 style="color: #0f766e; margin-bottom: 8px;">Medicamento registrado</h3>
-            <p><strong>Nombre:</strong> {{ request('nombre') }}</p>
-            <p><strong>Dosis:</strong> {{ request('dosis') }}</p>
-            <p><strong>Frecuencia:</strong> {{ request('frecuencia') }}</p>
-            <p><strong>Cantidad:</strong> {{ request('cantidad') }}</p>
-            <p><strong>Observaciones:</strong> {{ request('observaciones') }}</p>
+        @if(session('success'))
+            <div style="margin-top: 15px; padding: 10px; background-color: #ecfdf5; color: #065f46; border-radius: 5px;">
+                {{ session('success') }}
+            </div>
         @endif
+    </div>
+
+    <!-- Lista de Medicamentos Guardados -->
+    <div class="formulario" style="margin-top: 30px;">
+        <h2>📋 Lista de Medicamentos</h2>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+            <thead>
+                <tr style="background-color: #f1f5f9; text-align: left;">
+                    <th style="padding: 10px;">Nombre</th>
+                    <th style="padding: 10px;">Dosis</th>
+                    <th style="padding: 10px;">Frecuencia</th>
+                    <th style="padding: 10px;">Cantidad</th>
+                    <th style="padding: 10px;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if(isset($medicamentos) && count($medicamentos) > 0)
+                    @foreach($medicamentos as $medicamento)
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 10px;">{{ $medicamento->nombre }}</td>
+                        <td style="padding: 10px;">{{ $medicamento->dosis }}</td>
+                        <td style="padding: 10px;">{{ $medicamento->frecuencia }}</td>
+                        <td style="padding: 10px;">{{ $medicamento->cantidad }}</td>
+                        <td style="padding: 10px; display: flex; gap: 8px;">
+                            <a href="{{ route('medicamentos.edit', $medicamento->id) }}" style="background: #f59e0b; color: white; padding: 5px 10px; border-radius: 4px; text-decoration: none; font-size: 0.85rem;">Editar ✏️</a>
+                            
+                            <form action="{{ route('medicamentos.destroy', $medicamento->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de eliminar este medicamento?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" style="background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.85rem;">Eliminar 🗑️</button>
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <td colspan="5" style="padding: 15px; text-align: center; color: #64748b;">No hay medicamentos registrados todavía.</td>
+                    </tr>
+                @endif
+            </tbody>
+        </table>
     </div>
 
     <!-- Módulo de Verificación de Interacciones con Inputs Libres -->
@@ -62,8 +99,6 @@
         </div>
 
         <button type="button" onclick="verificarInteraccionLibre()" class="btn" style="margin-top: 15px;">Validar Combinación</button>
-
-        <!-- Alerta Dinámica -->
         <div id="resultadoAlertaLibre" style="display: none; margin-top: 20px; padding: 15px; border-radius: 8px; font-size: 0.95rem; line-height: 1.5;"></div>
     </div>
 
@@ -83,7 +118,6 @@
                 return;
             }
 
-            // Simulación inteligente de validación para cualquier texto que escriba el usuario
             if ((m1.includes('aspirina') && m2.includes('warfarina')) || (m1.includes('warfarina') && m2.includes('aspirina')) ||
                 (m1.includes('ibuprofeno') && m2.includes('warfarina')) || (m1.includes('warfarina') && m2.includes('ibuprofeno'))) {
                 contenedor.style.backgroundColor = '#fef2f2';
