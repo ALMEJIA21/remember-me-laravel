@@ -4,45 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Tratamiento;
-use Illuminate\Support\Facades\Http;
 
 class TratamientoController extends Controller
 {
     public function index(Request $request)
     {
         if ($request->isMethod('post')) {
-            $tratamiento = Tratamiento::create([
+            Tratamiento::create([
                 'nombre' => $request->input('nombre'),
                 'descripcion' => $request->input('descripcion'),
                 'fechaInicio' => $request->input('fechaInicio'),
                 'fechaFinal' => $request->input('fechaFinal'),
                 'estado' => $request->input('estado'),
             ]);
-
-            try {
-                $response = Http::withoutVerifying()->withHeaders([
-                    'Authorization' => 'Basic ' . env('ONESIGNAL_API_KEY'),
-                    'accept' => 'application/json',
-                    'content-type' => 'application/json',
-                ])->post('https://onesignal.com/api/v1/notifications', [
-                    'app_id' => '27523035-a407-409e-b081-1be4f253e102',
-                    'included_segments' => ['Total Subscriptions'],
-                    'headings' => [
-                        'en' => 'New Treatment Created',
-                        'es' => '📋 Nuevo Tratamiento Creado'
-                    ],
-                    'contents' => [
-                        'en' => 'Your treatment has started.',
-                        'es' => 'Tu tratamiento "' . $tratamiento->nombre . '" ha comenzado.'
-                    ],
-                ]);
-
-                if ($response->failed()) {
-                    dd($response->json());
-                }
-            } catch (\Exception $e) {
-                dd($e->getMessage());
-            }
 
             return back()->with('success', '¡Tratamiento guardado correctamente!');
         }

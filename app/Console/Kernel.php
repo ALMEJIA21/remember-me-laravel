@@ -12,8 +12,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // Añadimos nuestro comando para que se ejecute cada minuto
-        $schedule->command('enviar:recordatorios')->everyMinute();
+        // $schedule->command('inspire')->hourly();
     }
 
     /**

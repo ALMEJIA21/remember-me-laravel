@@ -16,14 +16,26 @@
         <h2>💊 Remember Me</h2>
         <p>Controla tus tratamientos de forma segura</p>
 
-        <form action="{{ route('dashboard') }}" method="GET">
-            <input type="email" name="correo" placeholder="ejemplo@correo.com" required>
+        @if ($errors->any())
+            <div class="login-error" style="color:#c0392b; margin-bottom:10px;">
+                {{ $errors->first() }}
+            </div>
+        @endif
+
+        <form action="{{ route('login.attempt') }}" method="POST">
+            @csrf
+            <input type="email" name="email" value="{{ old('email') }}" placeholder="ejemplo@correo.com" required autofocus>
             <input type="password" name="password" placeholder="********" required>
-            
+
+            <label style="display:block; font-size:0.85em; margin:8px 0;">
+                <input type="checkbox" name="remember" value="1"> Recordarme
+            </label>
+
             <button type="submit" class="btn-login">Iniciar Sesión</button>
         </form>
 
-        <a href="{{ route('inicio') }}" class="back" style="display: block; margin-top: 15px; text-decoration: none; color: #2b7a78;">← Volver al inicio</a>
+        <a href="{{ route('register') }}" class="back" style="display: block; margin-top: 15px; text-decoration: none; color: #2b7a78;">¿No tienes cuenta? Regístrate</a>
+        <a href="{{ route('inicio') }}" class="back" style="display: block; margin-top: 8px; text-decoration: none; color: #999; font-size: 0.85em;">← Volver al inicio</a>
     </div>
 </div>
 

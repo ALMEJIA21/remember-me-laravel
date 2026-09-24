@@ -7,12 +7,14 @@
         <h2>⏰ Recordatorios</h2>
 
         <form method="POST">
+            
             @csrf
             <label>Medicamento</label>
             <input type="text" name="medicamento" placeholder="Nombre medicamento" required>
 
-            <label>Hora del recordatorio (Formato 24h)</label>
-<input type="text" name="hora" placeholder="Ej: 14:30" required>
+            <label>Hora del recordatorio</label>
+            <input type="time" name="hora" required>
+
             <label>Días</label>
             <select name="dias">
                 <option>Todos los días</option>
