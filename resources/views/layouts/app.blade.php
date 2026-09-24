@@ -11,23 +11,8 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- OneSignal Web Push SDK Integrado -->
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-    <script>
-      window.OneSignalDeferred = window.OneSignalDeferred || [];
-      window.OneSignalDeferred.push(async function(OneSignal) {
-        await OneSignal.init({
-          appId: "{{ config('services.onesignal.app_id') }}",
-          safari_web_id: "web.onesignal.auto.00000000-0000-0000-0000-000000000000",
-          notifyButton: {
-            enable: true,
-          },
-        });
-        
-        // Forzar el aviso de notificaciones para pruebas
-        OneSignal.Slidedown.promptPush();
-      });
-    </script>
+    <!-- SweetAlert2 para Notificaciones Visuales Elegantes -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Estilos limpios y profesionales -->
     <style>
@@ -140,11 +125,20 @@
     <!-- CONTENIDO DINÁMICO -->
     <main class="main-content">
         
-        <!-- ALERTA GLOBAL DE ÉXITO -->
+        <!-- ALERTA VISUAL AUTOMÁTICA CON SWEETALERT2 -->
         @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show shadow-sm rounded-4 mb-4" role="alert" style="background-color: #d1e7dd; border-color: #badbcc; color: #0f5132; padding: 15px; margin-bottom: 20px;">
-                <i class="fas fa-check-circle me-2"></i> <strong>¡Excelente!</strong> {{ session('success') }}
-            </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Excelente!',
+                        text: '{{ session('success') }}',
+                        confirmButtonColor: '#0d9488',
+                        timer: 3500,
+                        timerProgressBar: true
+                    });
+                });
+            </script>
         @endif
 
         @yield('content')

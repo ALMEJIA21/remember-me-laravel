@@ -7,7 +7,6 @@
         <h2>⏰ Recordatorios</h2>
 
         <form method="POST">
-            
             @csrf
             <label>Medicamento</label>
             <input type="text" name="medicamento" placeholder="Nombre medicamento" required>
@@ -36,6 +35,27 @@
             </div>
         @endif
     </div>
+
+   <!-- Verificación automática de la hora del medicamento -->
+    @if(isset($recordatorios))
+        @foreach($recordatorios as $rec)
+            {{-- Comparamos solo los primeros 5 caracteres (HH:mm) para evitar el problema de los segundos (:00) --}}
+            @if(substr($rec->hora, 0, 5) == $horaActual && $rec->notificacion == 'Sí')
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        Swal.fire({
+                            icon: 'info',
+                            title: '¡Es hora de tu medicamento!',
+                            text: 'Debes tomar: {{ $rec->medicamento }} (Hora programada: {{ substr($rec->hora, 0, 5) }})',
+                            confirmButtonColor: '#0d9488',
+                            allowOutsideClick: false,
+                            footer: 'Remember Me - Alerta en Pantalla'
+                        });
+                    });
+                </script>
+            @endif
+        @endforeach
+    @endif
 
     <!-- Lista de Recordatorios Guardados -->
     <div class="formulario" style="margin-top: 30px;">

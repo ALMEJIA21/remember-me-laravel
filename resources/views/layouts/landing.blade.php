@@ -47,7 +47,7 @@
     <!-- Navbar Superior Pública -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top px-4">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="{{ route('inicio') }}" style="color: #0d9488;">
+            <a class="navbar-brand fw-bold" href="{{ url('/') }}" style="color: #0d9488;">
                 <i class="fas fa-capsules me-2"></i>Remember Me
             </a>
             <div class="ms-auto d-flex gap-2">
@@ -99,7 +99,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Revela secciones con la clase "reveal" a medida que entran en pantalla
         document.addEventListener('DOMContentLoaded', function () {
             const items = document.querySelectorAll('.reveal');
             const observer = new IntersectionObserver((entries) => {

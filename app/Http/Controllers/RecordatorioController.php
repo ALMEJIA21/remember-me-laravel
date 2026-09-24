@@ -32,9 +32,12 @@ class RecordatorioController extends Controller
 
         // Consultamos todos los recordatorios de la base de datos
         $recordatorios = Recordatorio::all();
+        
+        // Obtenemos la hora actual del servidor en formato de 24 horas (ej. 14:30)
+        $horaActual = now()->format('H:i');
 
-        // Los enviamos a la vista
-        return view('recordatorios', compact('recordatorios'));
+        // Los enviamos a la vista junto con la hora actual
+        return view('recordatorios', compact('recordatorios', 'horaActual'));
     }
 
     public function destroy($id)
