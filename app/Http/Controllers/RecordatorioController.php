@@ -4,51 +4,36 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Recordatorio;
-use Illuminate\Support\Facades\Http;
+use App\Services\OneSignalService;
 
 class RecordatorioController extends Controller
 {
     public function index(Request $request)
     {
         if ($request->isMethod('post')) {
+            $quiereNotificacion = $request->has('notificacion');
+
             $recordatorio = Recordatorio::create([
                 'medicamento' => $request->input('medicamento'),
                 'hora' => $request->input('hora'),
                 'dias' => $request->input('dias'),
-                'notificacion' => $request->has('notificacion') ? 'Sí' : 'No',
+                'notificacion' => $quiereNotificacion ? 'Sí' : 'No',
             ]);
 
-            if ($request->has('notificacion')) {
-                try {
-                    $response = Http::withoutVerifying()->withHeaders([
-                         'Authorization' => 'Basic ' . env('ONESIGNAL_API_KEY'),
-                        'accept' => 'application/json',
-                        'content-type' => 'application/json',
-                    ])->post('https://onesignal.com/api/v1/notifications', [
-                        'app_id' => '27523035-a407-409e-b081-1be4f253e102',
-                        'included_segments' => ['Total Subscriptions'],
-                        'headings' => [
-                            'en' => 'Medication Reminder',
-                            'es' => '⏰ Recordatorio de Medicamento'
-                        ],
-                        'contents' => [
-                            'en' => 'Time to take your medication: ' . $recordatorio->medicamento,
-                            'es' => 'Es hora de tomar: ' . $recordatorio->medicamento . ' a las ' . $recordatorio->hora
-                        ],
-                    ]);
-
-                    if ($response->failed()) {
-                        dd($response->json());
-                    }
-                } catch (\Exception $e) {
-                    dd($e->getMessage());
-                }
+            if ($quiereNotificacion) {
+                OneSignalService::enviar(
+                    '💊 Nuevo recordatorio creado',
+                    "Se programó \"{$recordatorio->medicamento}\" a las {$recordatorio->hora}."
+                );
             }
 
             return back()->with('success', '¡Recordatorio guardado correctamente!');
         }
 
+        // Consultamos todos los recordatorios de la base de datos
         $recordatorios = Recordatorio::all();
+
+        // Los enviamos a la vista
         return view('recordatorios', compact('recordatorios'));
     }
 

@@ -7,6 +7,7 @@
         <h2>⏰ Recordatorios</h2>
 
         <form method="POST">
+            
             @csrf
             <label>Medicamento</label>
             <input type="text" name="medicamento" placeholder="Nombre medicamento" required>
