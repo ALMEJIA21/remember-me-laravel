@@ -17,7 +17,7 @@
       window.OneSignalDeferred = window.OneSignalDeferred || [];
       window.OneSignalDeferred.push(async function(OneSignal) {
         await OneSignal.init({
-          appId: "27523035-a407-409e-b081-1be4f253e102",
+          appId: "{{ config('services.onesignal.app_id') }}",
           safari_web_id: "web.onesignal.auto.00000000-0000-0000-0000-000000000000",
           notifyButton: {
             enable: true,
@@ -114,13 +114,26 @@
         <h2>💊 Remember Me</h2>
         <ul>
             <li><a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}"><i class="fa-solid fa-house"></i> Inicio</a></li>
+            @if(auth()->user()->role === 'cuidador')
+                <li><a href="{{ route('cuidador.pacientes') }}" class="{{ request()->routeIs('cuidador.pacientes') ? 'active' : '' }}"><i class="fa-solid fa-people-group"></i> Mis Pacientes</a></li>
+            @endif
+            @if(auth()->user()->role === 'administrador')
+                <li><a href="{{ route('admin.usuarios') }}" class="{{ request()->routeIs('admin.usuarios') ? 'active' : '' }}"><i class="fa-solid fa-user-shield"></i> Administración</a></li>
+            @endif
             <li><a href="{{ route('usuario') }}" class="{{ request()->routeIs('usuario') ? 'active' : '' }}"><i class="fa-solid fa-user"></i> Usuario</a></li>
             <li><a href="{{ route('tratamiento') }}" class="{{ request()->routeIs('tratamiento') ? 'active' : '' }}"><i class="fa-solid fa-notes-medical"></i> Tratamiento</a></li>
             <li><a href="{{ route('medicamentos') }}" class="{{ request()->routeIs('medicamentos') ? 'active' : '' }}"><i class="fa-solid fa-capsules"></i> Medicamentos</a></li>
             <li><a href="{{ route('recordatorios') }}" class="{{ request()->routeIs('recordatorios') ? 'active' : '' }}"><i class="fa-solid fa-bell"></i> Recordatorios</a></li>
             <li><a href="{{ route('seguimiento') }}" class="{{ request()->routeIs('seguimiento') ? 'active' : '' }}"><i class="fa-solid fa-chart-line"></i> Seguimiento</a></li>
             <li><a href="{{ route('farmacias') }}" class="{{ request()->routeIs('farmacias') ? 'active' : '' }}"><i class="fa-solid fa-map-location-dot"></i> Farmacias</a></li>
-            <li><a href="{{ route('inicio') }}"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</a></li>
+            <li>
+                <form action="{{ route('logout') }}" method="POST" style="margin:0;">
+                    @csrf
+                    <button type="submit" style="all:unset; cursor:pointer; display:flex; align-items:center; gap:8px; width:100%; padding:inherit;">
+                        <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
+                    </button>
+                </form>
+            </li>
         </ul>
     </aside>
 

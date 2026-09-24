@@ -12,10 +12,16 @@ class Usuario extends Model
     protected $table = 'usuarios';
 
     protected $fillable = [
+        'cuidador_id',
         'nombre',
         'correo',
         'telefono',
         'fechaNacimiento',
         'tipoUsuario'
     ];
+
+    public function cuidador()
+    {
+        return $this->belongsTo(User::class, 'cuidador_id');
+    }
 }

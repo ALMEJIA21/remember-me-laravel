@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -41,4 +42,24 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Roles válidos dentro de la aplicación.
+     */
+    public const ROLES = ['paciente', 'cuidador', 'administrador'];
+
+    public function isAdministrador(): bool
+    {
+        return $this->role === 'administrador';
+    }
+
+    public function isCuidador(): bool
+    {
+        return $this->role === 'cuidador';
+    }
+
+    public function isPaciente(): bool
+    {
+        return $this->role === 'paciente';
+    }
 }

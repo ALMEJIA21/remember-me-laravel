@@ -4,23 +4,36 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Recordatorio;
+use App\Services\OneSignalService;
 
 class RecordatorioController extends Controller
 {
     public function index(Request $request)
     {
         if ($request->isMethod('post')) {
-            Recordatorio::create([
+            $quiereNotificacion = $request->has('notificacion');
+
+            $recordatorio = Recordatorio::create([
                 'medicamento' => $request->input('medicamento'),
                 'hora' => $request->input('hora'),
                 'dias' => $request->input('dias'),
-                'notificacion' => $request->has('notificacion') ? 'Sí' : 'No',
+                'notificacion' => $quiereNotificacion ? 'Sí' : 'No',
             ]);
+
+            if ($quiereNotificacion) {
+                OneSignalService::enviar(
+                    '💊 Nuevo recordatorio creado',
+                    "Se programó \"{$recordatorio->medicamento}\" a las {$recordatorio->hora}."
+                );
+            }
 
             return back()->with('success', '¡Recordatorio guardado correctamente!');
         }
 
+        // Consultamos todos los recordatorios de la base de datos
         $recordatorios = Recordatorio::all();
+
+        // Los enviamos a la vista
         return view('recordatorios', compact('recordatorios'));
     }
 
