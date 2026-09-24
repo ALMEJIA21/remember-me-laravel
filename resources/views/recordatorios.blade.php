@@ -6,7 +6,7 @@
     <div class="formulario">
         <h2>⏰ Recordatorios</h2>
 
-        <form method="POST">
+        <form method="POST" action="{{ route('recordatorios') }}">
             @csrf
             <label>Medicamento</label>
             <input type="text" name="medicamento" placeholder="Nombre medicamento" required>
@@ -36,25 +36,40 @@
         @endif
     </div>
 
-   <!-- Verificación automática de la hora del medicamento -->
-    @if(isset($recordatorios))
-        @foreach($recordatorios as $rec)
-            {{-- Comparamos solo los primeros 5 caracteres (HH:mm) para evitar el problema de los segundos (:00) --}}
-            @if(substr($rec->hora, 0, 5) == $horaActual && $rec->notificacion == 'Sí')
-                <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        Swal.fire({
-                            icon: 'info',
-                            title: '¡Es hora de tu medicamento!',
-                            text: 'Debes tomar: {{ $rec->medicamento }} (Hora programada: {{ substr($rec->hora, 0, 5) }})',
-                            confirmButtonColor: '#0d9488',
-                            allowOutsideClick: false,
-                            footer: 'Remember Me - Alerta en Pantalla'
-                        });
-                    });
-                </script>
-            @endif
-        @endforeach
+    <!-- Script de verificación automática en tiempo real -->
+    @if(isset($recordatorios) && count($recordatorios) > 0)
+        <script>
+            const listaRecordatorios = @json($recordatorios);
+
+            function revisarReloj() {
+                const ahora = new Date();
+                const horas = String(ahora.getHours()).padStart(2, '0');
+                const minutos = String(ahora.getMinutes()).padStart(2, '0');
+                const horaActual = `${horas}:${minutos}`;
+
+                listaRecordatorios.forEach(rec => {
+                    if (!rec.hora || rec.notificacion !== 'Sí') return;
+                    const horaRec = rec.hora.substring(0, 5);
+
+                    if (horaRec === horaActual) {
+                        const idUnico = `alerta_${rec.id}_${horaActual}`;
+                        if (!sessionStorage.getItem(idUnico)) {
+                            sessionStorage.setItem(idUnico, 'true');
+                            Swal.fire({
+                                icon: 'info',
+                                title: '¡Es hora de tu medicamento!',
+                                text: `Debes tomar: ${rec.medicamento} (Programado para las ${horaRec})`,
+                                confirmButtonColor: '#0d9488',
+                                allowOutsideClick: false,
+                                footer: 'Remember Me - Alerta en Vivo'
+                            });
+                        }
+                    }
+                });
+            }
+
+            setInterval(revisarReloj, 5000);
+        </script>
     @endif
 
     <!-- Lista de Recordatorios Guardados -->
