@@ -5,28 +5,28 @@
 @section('content')
     <header>
         <h1>Bienvenido, Usuario 👋</h1>
-        <p>Gestiona tus tratamientos de forma sencilla y segura.</p>
+        <p>Gestiona tus tratamientos de forma sencilla y segura con datos en tiempo real.</p>
     </header>
 
-    <!-- TARJETAS -->
+    <!-- TARJETAS DINÁMICAS -->
     <section class="cards">
         <div class="card">
             <h3><i class="fa-solid fa-capsules" style="color: #0d9488;"></i> Medicamentos</h3>
-            <p style="font-size: 1.8rem; font-weight: bold; margin-top: 10px;">5</p>
+            <p style="font-size: 1.8rem; font-weight: bold; margin-top: 10px;">{{ $medicamentosCount ?? 0 }}</p>
         </div>
 
         <div class="card">
             <h3><i class="fa-solid fa-clock" style="color: #d97706;"></i> Próxima Dosis</h3>
-            <p style="font-size: 1.8rem; font-weight: bold; margin-top: 10px;">08:00 PM</p>
+            <p style="font-size: 1.8rem; font-weight: bold; margin-top: 10px;">{{ $proximaDosis ?? '--:--' }}</p>
         </div>
 
         <div class="card">
             <h3><i class="fa-solid fa-calendar-days" style="color: #4f46e5;"></i> Tratamientos</h3>
-            <p style="font-size: 1.8rem; font-weight: bold; margin-top: 10px;">3</p>
+            <p style="font-size: 1.8rem; font-weight: bold; margin-top: 10px;">{{ $tratamientosCount ?? 0 }}</p>
         </div>
     </section>
 
-    <!-- TABLA -->
+    <!-- TABLA DE RECORDATORIOS REALES -->
     <section class="table-section" style="margin-top: 30px; padding: 20px;">
         <h2>Próximos Recordatorios</h2>
 
@@ -39,21 +39,25 @@
                 </tr>
             </thead>
             <tbody>
-                <tr style="border-bottom: 1px solid #f1f5f9;">
-                    <td style="padding: 12px;">Paracetamol</td>
-                    <td style="padding: 12px;">08:00 PM</td>
-                    <td style="padding: 12px;"><span class="pendiente">Pendiente</span></td>
-                </tr>
-                <tr style="border-bottom: 1px solid #f1f5f9;">
-                    <td style="padding: 12px;">Ibuprofeno</td>
-                    <td style="padding: 12px;">10:00 PM</td>
-                    <td style="padding: 12px;"><span class="pendiente">Pendiente</span></td>
-                </tr>
-                <tr>
-                    <td style="padding: 12px;">Vitamina C</td>
-                    <td style="padding: 12px;">07:00 AM</td>
-                    <td style="padding: 12px;"><span class="completado">Tomado</span></td>
-                </tr>
+                @if(isset($recordatorios) && count($recordatorios) > 0)
+                    @foreach($recordatorios as $rec)
+                    <tr style="border-bottom: 1px solid #f1f5f9;">
+                        <td style="padding: 12px;">{{ $rec->medicamento }}</td>
+                        <td style="padding: 12px;">{{ $rec->hora }}</td>
+                        <td style="padding: 12px;">
+                            @if($rec->notificacion == 'Sí')
+                                <span class="pendiente" style="background: #fef3c7; color: #d97706; padding: 4px 10px; border-radius: 12px; font-size: 0.85rem;">Activa</span>
+                            @else
+                                <span class="completado" style="background: #f1f5f9; color: #64748b; padding: 4px 10px; border-radius: 12px; font-size: 0.85rem;">Inactiva</span>
+                            @endif
+                        </td>
+                    </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <td colspan="3" style="padding: 20px; text-align: center; color: #64748b;">No hay recordatorios registrados todavía en la base de datos.</td>
+                    </tr>
+                @endif
             </tbody>
         </table>
     </section>

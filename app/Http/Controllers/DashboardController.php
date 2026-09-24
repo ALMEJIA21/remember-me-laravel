@@ -22,7 +22,7 @@ class DashboardController extends Controller
         return match ($user->role) {
             'administrador' => $this->administrador(),
             'cuidador' => $this->cuidador(),
-            default => view('dashboard_paciente'),
+            default => $this->paciente(),
         };
     }
 
@@ -50,6 +50,16 @@ class DashboardController extends Controller
             ->get();
 
         return view('dashboard_cuidador', compact('pacientes'));
+    }
+
+    private function paciente()
+    {
+        $medicamentosCount = Medicamento::count();
+        $tratamientosCount = Tratamiento::count();
+        $recordatorios = Recordatorio::orderBy('hora', 'asc')->take(5)->get();
+        $proximaDosis = Recordatorio::orderBy('hora', 'asc')->value('hora') ?? 'Sin definir';
+
+        return view('dashboard_paciente', compact('medicamentosCount', 'tratamientosCount', 'recordatorios', 'proximaDosis'));
     }
 
     /**

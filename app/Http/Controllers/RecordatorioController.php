@@ -39,14 +39,13 @@ class RecordatorioController extends Controller
         // Los enviamos a la vista junto con la hora actual
         return view('recordatorios', compact('recordatorios', 'horaActual'));
     }
+public function destroy($id)
+{
+    $recordatorio = Recordatorio::findOrFail($id);
+    $recordatorio->delete();
 
-    public function destroy($id)
-    {
-        $recordatorio = Recordatorio::findOrFail($id);
-        $recordatorio->delete();
-
-        return back()->with('success', '¡Recordatorio eliminado correctamente!');
-    }
+    return back()->with('success', '¡Recordatorio eliminado correctamente!');
+}
 
     public function edit($id)
     {
